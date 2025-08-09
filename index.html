@@ -240,7 +240,7 @@
         <p class="font-bold">Main Creator: Hasib</p>
         <p>Agricultural and Bioresources Engineering, Gazipur Agricultural University</p>
         <p class="mt-2">Assisted By: MBS</p>
-        <p class="mt-4 text-sm">All Rights Reserved 2025</p>
+        <p class="mt-4 text-sm">© 2003-2025 All rights reserved</p>
       </div>
     </div>
     <div id="optionsSection" class="hidden mt-6">
@@ -287,7 +287,7 @@
     let showChoiceModal = false;
     let showCloseOptions = false;
     let isMainOptionToast = false;
-    let audio = null; // Global audio object to control playback
+    let audio = null;
     const mainContent = document.getElementById('mainContent');
     const initialScreen = document.getElementById('initialScreen');
     const optionsSection = document.getElementById('optionsSection');
@@ -300,16 +300,16 @@
     const painCounterDisplay = document.getElementById('painCounter');
     const playMainToastSound = () => {
       if (audio) {
-        audio.pause(); // Stop any existing playback
-        audio.currentTime = 0; // Reset to start
+        audio.pause();
+        audio.currentTime = 0;
       }
-      audio = new Audio('sound.mp3'); // Use relative path for sound file
+      audio = new Audio('sound.mp3');
       audio.play().catch((error) => console.error('Main toast sound playback failed:', error));
     };
     const stopMainToastSound = () => {
       if (audio) {
         audio.pause();
-        audio.currentTime = 0; // Reset to start for next play
+        audio.currentTime = 0;
       }
     };
     const particlesContainer = document.getElementById('particles');
@@ -346,7 +346,6 @@
         choiceModal.classList.remove('blur-background');
         closeOptionsModal.classList.remove('blur-background');
       }
-      // Ensure toast and close button are never blurred
       toast.classList.remove('blur-background');
       closeToastBtn.classList.remove('blur-background');
     };
@@ -385,7 +384,7 @@
         counterDisplay.textContent = `শিহাব গে এর গোয়া মারা হয়েছে: ${count} বার`;
         painCounterDisplay.textContent = `নুনু ব্যাথা ধরে গেছে: ${painCount} বার`;
         toggleBackgroundBlur(false);
-        stopMainToastSound(); // Stop sound on reset
+        stopMainToastSound();
       }
     });
     const optionButtons = {
@@ -429,13 +428,13 @@
       showToast('পরে মারার জন্য সেভ করা হলো!', 'toast-later');
     });
     document.getElementById('closeToastBtn').addEventListener('click', () => {
-      stopMainToastSound(); // Stop the sound when closing toast
+      stopMainToastSound();
       if (isMainOptionToast) {
         showCloseOptions = true;
         closeOptionsModal.classList.remove('hidden');
         toast.classList.add('hidden');
         closeToastBtn.classList.add('hidden');
-        toggleBackgroundBlur(true, false, true); // Keep blur when showing closeOptionsModal
+        toggleBackgroundBlur(true, false, true);
       } else {
         toast.classList.add('hidden');
         closeToastBtn.classList.add('hidden');
@@ -446,7 +445,7 @@
       toast.classList.add('hidden');
       closeOptionsModal.classList.add('hidden');
       showCloseOptions = false;
-      toggleBackgroundBlur(false); // Remove blur when closing
+      toggleBackgroundBlur(false);
       alert('Toast closed because: আর মারার মুড নাই');
     });
     document.getElementById('closeReason2Btn').addEventListener('click', () => {
@@ -457,7 +456,7 @@
       painCounterDisplay.textContent = `নুনু ব্যাথা ধরে গেছে: ${painCount} বার`;
       painCounterDisplay.classList.add('counter-update');
       setTimeout(() => painCounterDisplay.classList.remove('counter-update'), 300);
-      toggleBackgroundBlur(false); // Remove blur when closing
+      toggleBackgroundBlur(false);
       alert('Toast closed because: নুনু ব্যাথা ধরে গেছে');
     });
   </script>
