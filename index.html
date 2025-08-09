@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>গোয়া মারার প্রোগ্রাম</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&family=Hind+Siliguri:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Noto Sans Bengali', 'Hind Siliguri', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      margin: 0;
+      overflow: hidden;
+      touch-action: manipulation;
+    }
+    .fade-in {
+      animation: fadeIn 0.5s ease-in;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .neon-glow:hover, .neon-glow:active {
+      box-shadow: 0 0 20px rgba(255, 255, 255, 1);
+      transform: scale(1.05);
+    }
+    .btn-gradient {
+      background: linear-gradient(45deg, #ff00cc, #33ccff, #ffcc00, #ff0066);
+      background-size: 300% 300%;
+      animation: gradientAnimation 4s ease infinite;
+    }
+    @keyframes gradientAnimation {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .pulse {
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+      100% { transform: scale(1); }
+    }
+    .counter-update {
+      animation: counterPulse 0.3s ease-in-out;
+    }
+    @keyframes counterPulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+    .glass-ui {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 0.75rem;
+    }
+    .option-btn-1 { background: #ff6f61; }
+    .option-btn-1:hover, .option-btn-1:active { background: #e55a50; }
+    .option-btn-2 { background: #ffca28; }
+    .option-btn-2:hover, .option-btn-2:active { background: #e5b423; }
+    .option-btn-3 { background: #00e676; }
+    .option-btn-3:hover, .option-btn-3:active { background: #00c853; }
+    .option-btn-4 { background: #40c4ff; }
+    .option-btn-4:hover, .option-btn-4:active { background: #2196f3; }
+    .option-btn-5 { background: #e040fb; }
+    .option-btn-5:hover, .option-btn-5:active { background: #c2185b; }
+    .option-btn-6 { background: #ffeb3b; }
+    .option-btn-6:hover, .option-btn-6:active { background: #fbc02d; }
+    .modal {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+    }
+    .choice-modal-content, .close-modal-content {
+      background: linear-gradient(45deg, #4b0082, #8b008b);
+      color: white;
+      padding: 1.5rem;
+      border-radius: 0.75rem;
+      animation: modalPop 0.5s ease-in-out;
+      text-align: center;
+      z-index: 1500;
+    }
+    .choice-modal-content button, .close-modal-content button {
+      transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+    .choice-modal-content button:hover, .choice-modal-content button:active,
+    .close-modal-content button:hover, .close-modal-content button:active {
+      transform: scale(1.1);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 1);
+    }
+    @keyframes modalPop {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .toast {
+      position: fixed;
+      top: 0.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      z-index: 2000;
+      max-width: 90%;
+      text-align: center;
+    }
+    .toast-main {
+      background: linear-gradient(45deg, #ff00cc, #33ccff, #ffcc00, #ff0066);
+      background-size: 300% 300%;
+      animation: gradientAnimation 4s ease infinite, blink 1s ease-in-out infinite;
+    }
+    .toast-option-1 { background: #ff6f61; }
+    .toast-option-2 { background: #ffca28; }
+    .toast-option-4 { background: #40c4ff; }
+    .toast-option-5 { background: #e040fb; }
+    .toast-option-6 { background: #ffeb3b; }
+    .toast-later { background: #ef5350; }
+    @keyframes blink {
+      0% { opacity: 1; }
+      50% { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
+    .toast-close-btn {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 0.5rem 2rem;
+      border-radius: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      font-family: 'Hind Siliguri', sans-serif;
+    }
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+    .particle {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      animation: float 15s infinite linear;
+    }
+    @keyframes float {
+      0% { transform: translateY(100vh) scale(0); }
+      100% { transform: translateY(-100vh) scale(1); }
+    }
+    .blur-background {
+      filter: blur(8px);
+      pointer-events: none;
+    }
+    @media (max-width: 640px) {
+      .container {
+        padding: 0.5rem;
+        max-width: 100%;
+      }
+      #mainTitle {
+        font-size: 2rem;
+        line-height: 1.2;
+      }
+      #startBtn {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+      }
+      .text-lg {
+        font-size: 0.875rem;
+      }
+      .option-btn {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.875rem;
+        border-radius: 1rem;
+      }
+      #optionsSection h2 {
+        font-size: 1.25rem;
+      }
+      #resetBtn {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.875rem;
+      }
+      .space-y-4 > li {
+        margin-bottom: 0.5rem;
+      }
+      .toast {
+        top: 0.5rem;
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+        max-width: 95%;
+      }
+      .toast-close-btn {
+        padding: 0.4rem 1.5rem;
+        font-size: 0.875rem;
+      }
+      .choice-modal-content, .close-modal-content {
+        padding: 1rem;
+        max-width: 90%;
+      }
+      .choice-modal-content h3, .close-modal-content h3 {
+        font-size: 1.25rem;
+      }
+      .choice-modal-content button, .close-modal-content button {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+      }
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 font-sans min-h-screen flex flex-col items-center justify-center">
+  <div class="particles" id="particles"></div>
+  <div id="mainContent" class="container mx-auto p-6 text-center max-w-md">
+    <div id="initialScreen">
+      <h1 id="mainTitle" class="text-5xl font-extrabold text-white mb-6 drop-shadow-lg pulse" style="font-family: 'Hind Siliguri', sans-serif;">গোয়া মারার প্রোগ্রাম</h1>
+      <button id="startBtn" class="btn-gradient text-white font-bold py-4 px-8 rounded-full text-xl transition duration-300 neon-glow pulse">গোয়া মারতে ক্লিক করুন</button>
+      <div class="text-lg text-white mt-6 italic font-semibold leading-relaxed" style="font-family: 'Noto Sans Bengali', sans-serif;">
+        <p class="font-bold">Main Creator: Hasib</p>
+        <p>Agricultural and Bioresources Engineering, Gazipur Agricultural University</p>
+        <p class="mt-2">Assisted By: MBS</p>
+        <p class="mt-4 text-sm">All Rights Reserved 2025</p>
+      </div>
+    </div>
+    <div id="optionsSection" class="hidden mt-6">
+      <div class="glass-ui p-4 mb-4">
+        <h2 class="text-3xl font-bold text-white drop-shadow-md fade-in" style="font-family: 'Hind Siliguri', sans-serif;">কার গোয়া মারতে চান?</h2>
+      </div>
+      <ul class="text-xl text-white space-y-4" style="font-family: 'Hind Siliguri', sans-serif;">
+        <li><button id="option1" class="option-btn-1 option-btn glass-ui text-white font-semibold py-3 px-6 rounded-full w-full transition duration-300 neon-glow fade-in">১. শিহাব</button></li>
+        <li><button id="option2" class="option-btn-2 option-btn glass-ui text-white font-semibold py-3 px-6 rounded-full w-full transition duration-300 neon-glow fade-in">২. শিহাব তাহমিদ</button></li>
+        <li><button id="option3" class="option-btn-3 option-btn glass-ui text-white font-semibold py-3 px-6 rounded-full w-full transition duration-300 neon-glow fade-in">৩. শিহাব গে</button></li>
+        <li><button id="option4" class="option-btn-4 option-btn glass-ui text-white font-semibold py-3 px-6 rounded-full w-full transition duration-300 neon-glow fade-in">৪. শিহাব মিয়া</button></li>
+        <li><button id="option5" class="option-btn-5 option-btn glass-ui text-white font-semibold py-3 px-6 rounded-full w-full transition duration-300 neon-glow fade-in">৫. শিহাব ভাই</button></li>
+        <li><button id="option6" class="option-btn-6 option-btn glass-ui text-white font-semibold py-3 px-6 rounded-full w-full transition duration-300 neon-glow fade-in">৬. শিহাব বাবু</button></li>
+      </ul>
+      <div class="mt-6 glass-ui p-4 rounded-lg">
+        <p id="counter" class="text-lg text-white font-semibold counter-update" style="font-family: 'Hind Siliguri', sans-serif;">শিহাব গে এর গোয়া মারা হয়েছে: 0 বার</p>
+        <p id="painCounter" class="text-lg text-white font-semibold counter-update" style="font-family: 'Hind Siliguri', sans-serif;">নুনু ব্যাথা ধরে গেছে: 0 বার</p>
+        <button id="resetBtn" class="bg-gradient-to-r from-gray-600 to-gray-800 hover:from-gray-800 hover:to-gray-600 text-white font-semibold py-2 px-4 rounded-full mt-4 transition duration-300 neon-glow">আবার শুরু করো</button>
+      </div>
+    </div>
+  </div>
+  <div id="choiceModal" class="modal hidden">
+    <div class="choice-modal-content">
+      <h3 class="text-2xl font-bold mb-4" style="font-family: 'Hind Siliguri', sans-serif;">কখন মারবেন?</h3>
+      <button id="hitNowBtn" class="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded mr-2 neon-glow">এখনই মারবো</button>
+      <button id="hitLaterBtn" class="bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded neon-glow">পরে মারবো</button>
+    </div>
+  </div>
+  <div id="closeOptionsModal" class="modal hidden">
+    <div class="close-modal-content">
+      <h3 class="text-2xl font-bold mb-4" style="font-family: 'Hind Siliguri', sans-serif;">কেন বন্ধ করবেন?</h3>
+      <button id="closeReason1Btn" class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded mr-2 neon-glow">আর মারার মুড নাই</button>
+      <button id="closeReason2Btn" class="bg-purple-500 hover:bg-purple-700 text-white py-2 px-4 rounded neon-glow">নুনু ব্যাথা ধরে গেছে</button>
+    </div>
+  </div>
+  <div id="toast" class="toast hidden">
+    <span id="toastMessage"></span>
+  </div>
+  <button id="closeToastBtn" class="toast-close-btn hidden">Close</button>
+
+  <script>
+    let showOptions = false;
+    let count = 0;
+    let painCount = 0;
+    let showChoiceModal = false;
+    let showCloseOptions = false;
+    let isMainOptionToast = false;
+    let audio = null; // Global audio object to control playback
+
+    const mainContent = document.getElementById('mainContent');
+    const initialScreen = document.getElementById('initialScreen');
+    const optionsSection = document.getElementById('optionsSection');
+    const choiceModal = document.getElementById('choiceModal');
+    const closeOptionsModal = document.getElementById('closeOptionsModal');
+    const toast = document.getElementById('toast');
+    const toastMessage = document.getElementById('toastMessage');
+    const closeToastBtn = document.getElementById('closeToastBtn');
+    const counterDisplay = document.getElementById('counter');
+    const painCounterDisplay = document.getElementById('painCounter');
+
+    const playMainToastSound = () => {
+      if (audio) {
+        audio.pause(); // Stop any existing playback
+        audio.currentTime = 0; // Reset to start
+      }
+      audio = new Audio('sound.mp3'); // Use relative path for sound file
+      audio.play().catch((error) => console.error('Main toast sound playback failed:', error));
+    };
+
+    const stopMainToastSound = () => {
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0; // Reset to start for next play
+      }
+    };
+
+    const particlesContainer = document.getElementById('particles');
+    for (let i = 0; i < 50; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      particle.style.width = `${Math.random() * 5 + 2}px`;
+      particle.style.height = particle.style.width;
+      particle.style.left = `${Math.random() * 100}vw`;
+      particle.style.animationDuration = `${Math.random() * 10 + 10}s`;
+      particle.style.animationDelay = `${Math.random() * 5}s`;
+      particlesContainer.appendChild(particle);
+    }
+
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+      });
+    });
+
+    const toggleBackgroundBlur = (enable, isChoiceModal = false) => {
+      if (enable) {
+        mainContent.classList.add('blur-background');
+        if (!isChoiceModal) {
+          choiceModal.classList.add('blur-background');
+        }
+        closeOptionsModal.classList.add('blur-background');
+      } else {
+        mainContent.classList.remove('blur-background');
+        choiceModal.classList.remove('blur-background');
+        closeOptionsModal.classList.remove('blur-background');
+      }
+    };
+
+    const showToast = (message, className, isMain = false) => {
+      toastMessage.textContent = message;
+      toast.className = `toast ${className}`;
+      toast.classList.remove('hidden');
+      closeToastBtn.classList.remove('hidden');
+      isMainOptionToast = isMain;
+      toggleBackgroundBlur(true);
+      setTimeout(() => {
+        const toastRect = toast.getBoundingClientRect();
+        closeToastBtn.style.top = `${toastRect.bottom + 10}px`;
+      }, 0);
+    };
+
+    document.getElementById('startBtn').addEventListener('click', () => {
+      showOptions = true;
+      initialScreen.classList.add('hidden');
+      optionsSection.classList.remove('hidden');
+      counterDisplay.textContent = `শিহাব গে এর গোয়া মারা হয়েছে: ${count} বার`;
+      painCounterDisplay.textContent = `নুনু ব্যাথা ধরে গেছে: ${painCount} বার`;
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      if (confirm('আপনি কি নিশ্চিতভাবে আবার শুরু করতে চান?')) {
+        showOptions = false;
+        showChoiceModal = false;
+        showCloseOptions = false;
+        count = 0;
+        painCount = 0;
+        initialScreen.classList.remove('hidden');
+        optionsSection.classList.add('hidden');
+        choiceModal.classList.add('hidden');
+        closeOptionsModal.classList.add('hidden');
+        toast.classList.add('hidden');
+        closeToastBtn.classList.add('hidden');
+        counterDisplay.textContent = `শিহাব গে এর গোয়া মারা হয়েছে: ${count} বার`;
+        painCounterDisplay.textContent = `নুনু ব্যাথা ধরে গেছে: ${painCount} বার`;
+        toggleBackgroundBlur(false);
+        stopMainToastSound(); // Stop sound on reset
+      }
+    });
+
+    const optionButtons = {
+      option1: () => {
+        showToast('শিহাব গে এর গোয়া মারুন', 'toast-option-1');
+      },
+      option2: () => {
+        showToast('শিহাব গে এর গোয়া মারুন', 'toast-option-2');
+      },
+      option3: () => {
+        showChoiceModal = true;
+        choiceModal.classList.remove('hidden');
+        toggleBackgroundBlur(true, true);
+      },
+      option4: () => {
+        showToast('শিহাব গে এর গোয়া মারুন', 'toast-option-4');
+      },
+      option5: () => {
+        showToast('শিহাব গে এর গোয়া মারুন', 'toast-option-5');
+      },
+      option6: () => {
+        showToast('শিহাব গে এর গোয়া মারুন', 'toast-option-6');
+      },
+    };
+
+    Object.keys(optionButtons).forEach((id) => {
+      document.getElementById(id).addEventListener('click', optionButtons[id]);
+    });
+
+    document.getElementById('hitNowBtn').addEventListener('click', () => {
+      showChoiceModal = false;
+      choiceModal.classList.add('hidden');
+      showToast('আহ আহ আহ ওহ ইয়েস বেবি', 'toast-main', true);
+      count += 1;
+      counterDisplay.textContent = `শিহাব গে এর গোয়া মারা হয়েছে: ${count} বার`;
+      counterDisplay.classList.add('counter-update');
+      setTimeout(() => counterDisplay.classList.remove('counter-update'), 300);
+      playMainToastSound();
+    });
+
+    document.getElementById('hitLaterBtn').addEventListener('click', () => {
+      showChoiceModal = false;
+      choiceModal.classList.add('hidden');
+      showToast('পরে মারার জন্য সেভ করা হলো!', 'toast-later');
+    });
+
+    document.getElementById('closeToastBtn').addEventListener('click', () => {
+      stopMainToastSound(); // Stop the sound when closing toast
+      if (isMainOptionToast) {
+        showCloseOptions = true;
+        closeOptionsModal.classList.remove('hidden');
+        toast.classList.add('hidden');
+        closeToastBtn.classList.add('hidden');
+        toggleBackgroundBlur(false);
+      } else {
+        toast.classList.add('hidden');
+        closeToastBtn.classList.add('hidden');
+        toggleBackgroundBlur(false);
+      }
+    });
+
+    document.getElementById('closeReason1Btn').addEventListener('click', () => {
+      toast.classList.add('hidden');
+      closeOptionsModal.classList.add('hidden');
+      showCloseOptions = false;
+      alert('Toast closed because: আর মারার মুড নাই');
+    });
+
+    document.getElementById('closeReason2Btn').addEventListener('click', () => {
+      toast.classList.add('hidden');
+      closeOptionsModal.classList.add('hidden');
+      showCloseOptions = false;
+      painCount += 1;
+      painCounterDisplay.textContent = `নুনু ব্যাথা ধরে গেছে: ${painCount} বার`;
+      painCounterDisplay.classList.add('counter-update');
+      setTimeout(() => painCounterDisplay.classList.remove('counter-update'), 300);
+      alert('Toast closed because: নুনু ব্যাথা ধরে গেছে');
+    });
+  </script>
+</body>
+</html>
