@@ -87,6 +87,8 @@
       animation: modalPop 0.5s ease-in-out;
       text-align: center;
       z-index: 1500;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
     .choice-modal-content button, .close-modal-content button {
       transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
@@ -279,7 +281,6 @@
     <span id="toastMessage"></span>
   </div>
   <button id="closeToastBtn" class="toast-close-btn hidden">Close</button>
-
   <script>
     let showOptions = false;
     let count = 0;
@@ -288,7 +289,6 @@
     let showCloseOptions = false;
     let isMainOptionToast = false;
     let audio = null; // Global audio object to control playback
-
     const mainContent = document.getElementById('mainContent');
     const initialScreen = document.getElementById('initialScreen');
     const optionsSection = document.getElementById('optionsSection');
@@ -299,7 +299,6 @@
     const closeToastBtn = document.getElementById('closeToastBtn');
     const counterDisplay = document.getElementById('counter');
     const painCounterDisplay = document.getElementById('painCounter');
-
     const playMainToastSound = () => {
       if (audio) {
         audio.pause(); // Stop any existing playback
@@ -308,14 +307,12 @@
       audio = new Audio('sound.mp3'); // Use relative path for sound file
       audio.play().catch((error) => console.error('Main toast sound playback failed:', error));
     };
-
     const stopMainToastSound = () => {
       if (audio) {
         audio.pause();
         audio.currentTime = 0; // Reset to start for next play
       }
     };
-
     const particlesContainer = document.getElementById('particles');
     for (let i = 0; i < 50; i++) {
       const particle = document.createElement('div');
@@ -327,27 +324,33 @@
       particle.style.animationDelay = `${Math.random() * 5}s`;
       particlesContainer.appendChild(particle);
     }
-
     const buttons = document.querySelectorAll('button');
     buttons.forEach((btn) => {
       btn.addEventListener('click', () => {
       });
     });
-
-    const toggleBackgroundBlur = (enable, isChoiceModal = false) => {
+    const toggleBackgroundBlur = (enable, isChoiceModal = false, isCloseModal = false) => {
       if (enable) {
         mainContent.classList.add('blur-background');
         if (!isChoiceModal) {
           choiceModal.classList.add('blur-background');
+        } else {
+          choiceModal.classList.remove('blur-background');
         }
-        closeOptionsModal.classList.add('blur-background');
+        if (!isCloseModal) {
+          closeOptionsModal.classList.add('blur-background');
+        } else {
+          closeOptionsModal.classList.remove('blur-background');
+        }
       } else {
         mainContent.classList.remove('blur-background');
         choiceModal.classList.remove('blur-background');
         closeOptionsModal.classList.remove('blur-background');
       }
+      // Ensure toast and close button are never blurred
+      toast.classList.remove('blur-background');
+      closeToastBtn.classList.remove('blur-background');
     };
-
     const showToast = (message, className, isMain = false) => {
       toastMessage.textContent = message;
       toast.className = `toast ${className}`;
@@ -360,7 +363,6 @@
         closeToastBtn.style.top = `${toastRect.bottom + 10}px`;
       }, 0);
     };
-
     document.getElementById('startBtn').addEventListener('click', () => {
       showOptions = true;
       initialScreen.classList.add('hidden');
@@ -368,7 +370,6 @@
       counterDisplay.textContent = `শিহাব গে এর গোয়া মারা হয়েছে: ${count} বার`;
       painCounterDisplay.textContent = `নুনু ব্যাথা ধরে গেছে: ${painCount} বার`;
     });
-
     document.getElementById('resetBtn').addEventListener('click', () => {
       if (confirm('আপনি কি নিশ্চিতভাবে আবার শুরু করতে চান?')) {
         showOptions = false;
@@ -388,7 +389,6 @@
         stopMainToastSound(); // Stop sound on reset
       }
     });
-
     const optionButtons = {
       option1: () => {
         showToast('শিহাব গে এর গোয়া মারুন', 'toast-option-1');
@@ -411,11 +411,9 @@
         showToast('শিহাব গে এর গোয়া মারুন', 'toast-option-6');
       },
     };
-
     Object.keys(optionButtons).forEach((id) => {
       document.getElementById(id).addEventListener('click', optionButtons[id]);
     });
-
     document.getElementById('hitNowBtn').addEventListener('click', () => {
       showChoiceModal = false;
       choiceModal.classList.add('hidden');
@@ -426,13 +424,11 @@
       setTimeout(() => counterDisplay.classList.remove('counter-update'), 300);
       playMainToastSound();
     });
-
     document.getElementById('hitLaterBtn').addEventListener('click', () => {
       showChoiceModal = false;
       choiceModal.classList.add('hidden');
       showToast('পরে মারার জন্য সেভ করা হলো!', 'toast-later');
     });
-
     document.getElementById('closeToastBtn').addEventListener('click', () => {
       stopMainToastSound(); // Stop the sound when closing toast
       if (isMainOptionToast) {
@@ -440,21 +436,20 @@
         closeOptionsModal.classList.remove('hidden');
         toast.classList.add('hidden');
         closeToastBtn.classList.add('hidden');
-        toggleBackgroundBlur(false);
+        toggleBackgroundBlur(true, false, true); // Keep blur when showing closeOptionsModal
       } else {
         toast.classList.add('hidden');
         closeToastBtn.classList.add('hidden');
         toggleBackgroundBlur(false);
       }
     });
-
     document.getElementById('closeReason1Btn').addEventListener('click', () => {
       toast.classList.add('hidden');
       closeOptionsModal.classList.add('hidden');
       showCloseOptions = false;
+      toggleBackgroundBlur(false); // Remove blur when closing
       alert('Toast closed because: আর মারার মুড নাই');
     });
-
     document.getElementById('closeReason2Btn').addEventListener('click', () => {
       toast.classList.add('hidden');
       closeOptionsModal.classList.add('hidden');
@@ -463,6 +458,7 @@
       painCounterDisplay.textContent = `নুনু ব্যাথা ধরে গেছে: ${painCount} বার`;
       painCounterDisplay.classList.add('counter-update');
       setTimeout(() => painCounterDisplay.classList.remove('counter-update'), 300);
+      toggleBackgroundBlur(false); // Remove blur when closing
       alert('Toast closed because: নুনু ব্যাথা ধরে গেছে');
     });
   </script>
